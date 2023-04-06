@@ -16,3 +16,16 @@ json_response <- fromJSON(json_response)
 str(json_response)
 results_df <- as.data.frame(json_response$response$results)
 summary(results_df)
+
+#search for articles based on electric cars to make a comparison. 
+
+query_car <- "electric car"
+
+response_car <- GET(url = base_url, query = list('api-key' = api_key, q = query_car,
+                                             from_date = from_date))
+
+json_response_c <- content(response_car, "text")
+json_response_c <- fromJSON(json_response_c)
+str(json_response_c)
+results_df_c <- as.data.frame(json_response_c$response$results)
+summary(results_df_c)
