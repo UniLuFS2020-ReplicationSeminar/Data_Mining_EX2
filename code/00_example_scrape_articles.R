@@ -18,11 +18,13 @@ results_df <- as.data.frame(json_response$response$results)
 summary(results_df)
 
 #search for articles based on electric cars to make a comparison. 
+#I am expending the time range for further results. 
 
 query_car <- "electric car"
+from_date_c <- "2020-01-01"
 
 response_car <- GET(url = base_url, query = list('api-key' = api_key, q = query_car,
-                                             from_date = from_date))
+                                             from_date_c = from_date_c))
 
 json_response_c <- content(response_car, "text")
 json_response_c <- fromJSON(json_response_c)
