@@ -1,3 +1,21 @@
+###NEW###
+
+#For the start, we can use the pre-made wrapper function guardianapi
+install.packages("guardianapi")
+library(guardianapi)
+
+api_key <- readLines("credentials/guardian_key.txt", n = 1)
+Sys.setenv(GUARDIAN_API_KEY = api_key) 
+
+query_energy <- "clean energy"
+query_car <- "electric car"
+from_date <- "2023-01-01"
+
+results_energy <- gu_content(query = query_energy, from_date = from_date)
+results_energy <- gu_content(query = query_car, from_date = from_date)
+
+###NEW###
+
 library(httr)
 library(jsonlite)
 
@@ -9,7 +27,6 @@ base_url <- "https://content.guardianapis.com/search"
 
 response <- GET(url = base_url, query = list('api-key' = api_key, q = query,
                                              from_date = from_date))
-
 
 json_response <- content(response, "text")
 json_response <- fromJSON(json_response)
