@@ -4,7 +4,7 @@
 install.packages("guardianapi")
 library(guardianapi)
 
-api_key <- readLines("credentials/guardian_key.txt", n = 1)
+api_key <- readLines("credentials/guardian_key.txt", n = -1, warn = FALSE)
 Sys.setenv(GUARDIAN_API_KEY = api_key) 
 
 query_energy <- "clean energy"
