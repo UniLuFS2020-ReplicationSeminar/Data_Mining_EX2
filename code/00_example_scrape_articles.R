@@ -14,10 +14,6 @@ from_date <- "2023-01-01"
 results_energy <- gu_content(query = query_energy, from_date = from_date)
 results_energy <- gu_content(query = query_car, from_date = from_date)
 
-#create data frame for results
-energy_df <- data.frame(title = character(), url = character(), content = character(), stringsAsFactors = FALSE)
-car_df <- data.frame(title = character(), url = character(), content = character(), stringsAsFactors = FALSE)
-
 ###NEW###
 
 library(httr)
@@ -46,10 +42,13 @@ query_car <- "electric car"
 from_date_c <- "2020-01-01"
 
 response_car <- GET(url = base_url, query = list('api-key' = api_key, q = query_car,
-                                             from_date_c = from_date_c))
+                                             from_date = from_date_c))
 
 json_response_c <- content(response_car, "text")
 json_response_c <- fromJSON(json_response_c)
 str(json_response_c)
 results_df_c <- as.data.frame(json_response_c$response$results)
 summary(results_df_c)
+
+
+
