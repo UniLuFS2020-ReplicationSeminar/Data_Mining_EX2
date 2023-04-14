@@ -15,6 +15,44 @@ from_date <- "2023-01-01"
 results_energy <- gu_content(query = query_energy, from_date = from_date)
 results_car <- gu_content(query = query_car, from_date = from_date)
 
+library(tidyverse)
+results_energy_selected <- select(results_energy, 
+                               type, 
+                               publication,
+                               pillar_name, 
+                               section_name, 
+                               byline, 
+                               web_title, 
+                               headline, 
+                               standfirst, 
+                               body_text, 
+                               web_publication_date, 
+                               first_publication_date, 
+                               last_modified, 
+                               production_office, 
+                               tags,
+                               is_live, 
+                               wordcount, 
+                               char_count)
+
+results_car_selected <- select(results_car, 
+                               type, 
+                               publication,
+                               pillar_name, 
+                               section_name, 
+                               byline, 
+                               web_title, 
+                               headline, 
+                               standfirst, 
+                               body_text, 
+                               web_publication_date, 
+                               first_publication_date, 
+                               last_modified, 
+                               production_office, 
+                               tags,
+                               is_live, 
+                               wordcount, 
+                               char_count)
 ###NEW###
 
 library(httr)
