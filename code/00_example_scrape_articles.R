@@ -14,10 +14,15 @@ from_date <- "2023-01-01"
 results_energy <- gu_content(query = query_energy, from_date = from_date)
 results_energy <- gu_content(query = query_car, from_date = from_date)
 
+#create data frame for results
+energy_df <- data.frame(title = character(), url = character(), content = character(), stringsAsFactors = FALSE)
+car_df <- data.frame(title = character(), url = character(), content = character(), stringsAsFactors = FALSE)
+
 ###NEW###
 
 library(httr)
 library(jsonlite)
+library(tidyverse)
 
 api_key <- readLines("credentials/guardian_key.txt", n = 1)
 # api_key <- rstudioapi::askForPassword()
