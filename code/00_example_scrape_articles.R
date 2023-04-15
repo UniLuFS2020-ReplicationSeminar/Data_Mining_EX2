@@ -15,8 +15,34 @@ from_date <- "2023-01-01"
 results_energy <- gu_content(query = query_energy, from_date = from_date)
 results_car <- gu_content(query = query_car, from_date = from_date)
 
+results_energy$check <- rep(0, nrow(results_energy))
+
+library(stringr)
+
+for (i in 1:nrow(results_energy)){
+  if(any(str_detect(results_energy$body_text[i], "clean energy"))) {
+    results_energy$check[i] <- 1
+  } else {
+    results_energy$check[i] <- 0
+  }
+}
+
+results_energy_only <- results_energy[results_energy$check==1,]
+
+results_car$check <- rep(0, nrow(results_car))
+
+for (i in 1:nrow(results_car)){
+  if(any(str_detect(results_car$body_text[i], "electric car"))) {
+    results_car$check[i] <- 1
+  } else {
+    results_car$check[i] <- 0
+  }
+}
+
+results_car_only <- results_car[results_car$check==1,]
+
 library(tidyverse)
-results_energy_selected <- select(results_energy, 
+results_energy_selected <- select(results_energy_only, 
                                type, 
                                publication,
                                pillar_name, 
@@ -35,7 +61,7 @@ results_energy_selected <- select(results_energy,
                                wordcount, 
                                char_count)
 
-results_car_selected <- select(results_car, 
+results_car_selected <- select(results_car_only, 
                                type, 
                                publication,
                                pillar_name, 
