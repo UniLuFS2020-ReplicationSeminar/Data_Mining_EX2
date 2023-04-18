@@ -86,13 +86,15 @@ generate_word_pairs_plot <- function(data, title) {
 }
 
 # Generate the word pairs plot for the energy data
-p1 <- generate_word_pairs_plot(results_energy_selected, "Top Pairs Energy")
+p1 <- generate_word_pairs_plot(results_energy_selected, "Top Bi-Grams Energy")
 
 # Generate the word pairs plot for the car data
-p2 <- generate_word_pairs_plot(results_car_selected, "Top Pairs Cars")
+p2 <- generate_word_pairs_plot(results_car_selected, "Top Bi-Grams Cars")
 
 # Combine the plots into a single grid
 grid.arrange(p1, p2, ncol = 1)
 
-# Save the combined plot in a specific directory by specifying the full path to the desired location
-ggsave("output/plots/top_word_pairs_combined.png", width = 10, height = 16)
+combined_plot <- arrangeGrob(p1, p2, ncol = 2)
+
+# Save the grob object using ggsave()
+ggsave("output/plots/top_word_pairs_combined.png", combined_plot, width = 16, height = 9)
