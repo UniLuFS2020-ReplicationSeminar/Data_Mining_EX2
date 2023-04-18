@@ -50,64 +50,49 @@ results_energy_selected %>%
 
 
 
-# Visualize Pairs 
+# Visualize Pairs --------
+library(tidytext)
+library(gridExtra)
 
+# Create a function to generate the word pairs plot
+generate_word_pairs_plot <- function(data, title) {
+  # Tokenize all the words from the article and remove stopwords
+  tidy_data <- data %>%
+    unnest_tokens(word, body_text) %>%
+    anti_join(stop_words) %>%
+    mutate(word = str_remove_all(word, "[^[:alnum:]]")) %>%
+    filter(str_length(word) > 2)
+  
+  # Filter to words used more than 3 times
+  word_counts <- tidy_data %>%
+    count(word, sort = TRUE) %>%
+    filter(n > 3)
+  
+  word_pairs <- tidy_data %>%
+    mutate(word_lead = lead(word)) %>%
+    filter(!is.na(word_lead)) %>%
+    count(word, word_lead, sort = TRUE) %>%
+    filter(n > quantile(n, probs = .95)) %>%
+    slice_head(n = 25)
+  
+  # Create a bar plot showing the top word pairs using ggplot2
+  p <- ggplot(word_pairs, aes(x = reorder(paste(word, word_lead), n), y = n)) +
+    geom_col(fill = "steelblue") +
+    coord_flip() +
+    ggtitle(title) +
+    theme_minimal()
+  
+  return(p)
+}
 
-# Tokenize all the words from the article and remove stopwords
-tidy_clean_energy <- results_energy_selected %>%
-  unnest_tokens(word, body_text) %>%
-  anti_join(stop_words) %>%
-  mutate(word = str_remove_all(word, "[^[:alnum:]]")) %>%
-  filter(str_length(word) > 2)
+# Generate the word pairs plot for the energy data
+p1 <- generate_word_pairs_plot(results_energy_selected, "Top Pairs Energy")
 
-#Filter to words used more than 3 times
-word_counts <- tidy_clean_energy %>%
-  count(word, sort = TRUE) %>%
-  filter(n > 3)
+# Generate the word pairs plot for the car data
+p2 <- generate_word_pairs_plot(results_car_selected, "Top Pairs Cars")
 
-word_pairs <- tidy_clean_energy %>%
-  mutate(word_lead = lead(word)) %>%
-  filter(!is.na(word_lead)) %>%
-  count(word, word_lead, sort = TRUE) %>%
-  filter(n > quantile(n, probs = .95)) %>%
-  slice_head(n = 50)
+# Combine the plots into a single grid
+grid.arrange(p1, p2, ncol = 1)
 
-# Create a bar plot showing the top word pairs using ggplot2
-ggplot(word_pairs, aes(x = reorder(paste(word, word_lead), n), y = n)) +
-  geom_col(fill = "steelblue") +
-  coord_flip() +
-  theme_minimal()
-
-# Save the plot in a specific directory by specifying the full path to the desired location
-ggsave("output/plots/top_word_pairs_energy.png", width = 10, height = 8)
-
-
-# Tokenize all the words from the article and remove stopwords
-tidy_car <- results_car_selected %>%
-  unnest_tokens(word, body_text) %>%
-  anti_join(stop_words) %>%
-  mutate(word = str_remove_all(word, "[^[:alnum:]]")) %>%
-  filter(str_length(word) > 2)
-
-#Filter to words used more than 3 times
-word_counts_car <- tidy_car %>%
-  count(word, sort = TRUE) %>%
-  filter(n > 3)
-
-word_pairs_car <- tidy_car %>%
-  mutate(word_lead = lead(word)) %>%
-  filter(!is.na(word_lead)) %>%
-  count(word, word_lead, sort = TRUE) %>%
-  filter(n > quantile(n, probs = .95)) %>%
-  slice_head(n = 50)
-
-# Create a bar plot showing the top word pairs using ggplot2
-ggplot(word_pairs_car, aes(x = reorder(paste(word, word_lead), n), y = n)) +
-  geom_col(fill = "steelblue") +
-  coord_flip() +
-  theme_minimal()
-
-# Save the plot in a specific directory by specifying the full path to the desired location
-ggsave("output/plots/top_word_pairs_car.png", width = 10, height = 8)
-
-
+# Save the combined plot in a specific directory by specifying the full path to the desired location
+ggsave("output/plots/top_word_pairs_combined.png", width = 10, height = 16)
