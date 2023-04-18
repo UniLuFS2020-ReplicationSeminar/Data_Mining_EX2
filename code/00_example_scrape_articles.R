@@ -79,6 +79,11 @@ results_car_selected <- select(results_car_only,
                                is_live, 
                                wordcount, 
                                char_count)
+
+#save the dataframes in the data_raw
+save(results_car_selected, file = "results_car_selected.rdata")
+save(results_energy_selected, file = "results_energy_selected.rdata")
+
 ###NEW###
 
 library(httr)
