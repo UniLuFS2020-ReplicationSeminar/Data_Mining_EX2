@@ -1,4 +1,4 @@
-###NEW###
+#New Function ---------------------------
 
 #For the start, we can use the pre-made wrapper function guardianapi
 install.packages("guardianapi")
@@ -84,7 +84,7 @@ results_car_selected <- select(results_car_only,
 save(results_car_selected, file = "results_car_selected.rdata")
 save(results_energy_selected, file = "results_energy_selected.rdata")
 
-###NEW###
+#Old Code -------------
 
 library(httr)
 library(jsonlite)
