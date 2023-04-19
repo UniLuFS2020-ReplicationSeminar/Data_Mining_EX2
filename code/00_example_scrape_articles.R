@@ -1,7 +1,7 @@
 #New Function ---------------------------
 
 #For the start, we can use the pre-made wrapper function guardianapi
-install.packages("guardianapi")
+# install.packages("guardianapi")
 library(guardianapi)
 
 api_key <- readLines("credentials/guardian_key.txt", n = 1, warn = FALSE)
@@ -81,8 +81,8 @@ results_car_selected <- select(results_car_only,
                                char_count)
 
 #save the dataframes in the data_raw
-save(results_car_selected, file = "results_car_selected.rdata")
-save(results_energy_selected, file = "results_energy_selected.rdata")
+save(results_car_selected, file = "data/data_processed/results_car_selected.rdata")
+save(results_energy_selected, file = "data/data_processed/results_energy_selected.rdata")
 
 #Old Code -------------
 
