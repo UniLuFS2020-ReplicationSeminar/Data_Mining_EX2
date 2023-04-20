@@ -36,26 +36,29 @@ results_car$check <- rep(0, nrow(results_car))
 library(stringr)
 
 # Loop to filter undesired observations out (results_energy data set):
-for (i in 1:nrow(results_energy)){                                              # loop over the total number of observations in "results_energy"
-  if(any(str_detect(results_energy$body_text[i], "clean energy"))) {            # if body_text contains "clean energy"
-    results_energy$check[i] <- 1                                                # then change the check variable to one,    
-  } else {                                                                      # otherwise
-    results_energy$check[i] <- 0                                                # check variable should remain 0.
+# loop over the total number of observations in "results_energy", if body_text contains "clean energy", then change the check variable to one, otherwise, check variable should remain 0.
+
+for (i in 1:nrow(results_energy)) {
+  if (any(str_detect(results_energy$body_text[i], "clean energy")) | any(str_detect(results_energy$body_text[i], "renewable energy"))) {
+    results_energy$check[i] <- 1
+  } else {
+    results_energy$check[i] <- 0
   }
 }
 
 # Loop to filter undesired observations out (results_car data set):           
-for (i in 1:nrow(results_car)){                                                 # loop over the total number of observations in "results_car"
-  if(any(str_detect(results_car$body_text[i], "electric car"))) {               # if body_text contains "electric car"
-    results_car$check[i] <- 1                                                   # then change the check variable to one, 
-  } else {                                                                      # otherwise
-    results_car$check[i] <- 0                                                   # check variable should remain 0.
+# Create the same loop but observe for "electric car" OR "electric vehicle"
+for (i in 1:nrow(results_car)) {
+  if (any(str_detect(results_car$body_text[i], "electric car")) | any(str_detect(results_car$body_text[i], "electric vehicle"))) {
+    results_car$check[i] <- 1
+  } else {
+    results_car$check[i] <- 0
   }
 }
 
 # Keep only the initially desired articles (those that include the words "clean energy" or "electric car", respectively)
-results_energy_only <- results_energy[results_energy$check==1,]
-results_car_only <- results_car[results_car$check==1,]
+results_energy_selected <- results_energy[results_energy$check==1,]
+results_car_selected <- results_car[results_car$check==1,]
 
 # Load the package "tidyverse"
 library(tidyverse)
