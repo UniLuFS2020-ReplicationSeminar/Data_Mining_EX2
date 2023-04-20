@@ -77,7 +77,7 @@ results_car_selected <- mutate(results_car_selected,
 
 #Create the plot for the 
 plot4 <- ggplot(results_car_selected %>% filter(!is.na(count) & count != 0), 
-                aes(x = factor(count), fill = factor(count), fill = "steelblue")) +
+                aes(x = factor(count), fill = factor(count))) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'challenge'") +
   labs(title = "Occurrences of 'challenge' in body text of articles with 'car' as main topic",
@@ -91,15 +91,13 @@ ggsave("output/plots/word_count_challenge_car.png", width = 16, height = 9)
 
 #show in which articles the keyword has been used a specific amount of time
 
-# Define the keyword and number of occurrences to search for
-num_occurrences <- 4
+# Filter the dataset to show the rows where the keyword "sustainable occurs more than 1 time in the body text of clean energy related articles
+Articles_energy_sustainable <- results_energy_selected %>%
+  filter(str_count(tolower(body_text), keyword) >= 1)
 
-# Filter the dataset to rows where the keyword occurs the specified number of times
-# in the "body_text" column
-results_energy_selected %>%
-  filter(str_count(tolower(body_text), keyword_2) == num_occurrences)
-
-
+#filter the dataset to show the same results for the keyword "challange"
+Articles_energy_challenge <- results_energy_selected %>%
+  filter(str_count(tolower(body_text), keyword_2) >= 1)
 
 # Visualize Pairs --------
 library(tidytext)
