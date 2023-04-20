@@ -8,8 +8,8 @@ library(ggraph)
 library(tidygraph)
 
 # Load datasets
-results_car <- load("data/data_processed/results_car_selected.Rdata")
-results_energy <- load("data/data_processed/results_energy_selected.Rdata")
+results_car <- load("data/data_raw/results_car_selected.Rdata")
+results_energy <- load("data/data_raw/results_energy_selected.Rdata")
 
 # Word Tree/Graph --------
 

@@ -5,8 +5,8 @@ library(ggplot2)
 
 #Load datasets
 
-results_car <- load("data/data_processed/results_car_selected.Rdata")
-results_energy <- load("data/data_processed/results_energy_selected.Rdata")
+results_car <- load("data/data_raw/results_car_selected.Rdata")
+results_energy <- load("data/data_raw/results_energy_selected.Rdata")
 
 # Count occurrences of "sustainable" in body_text column
 keyword <- "sustainable"
