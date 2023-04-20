@@ -20,13 +20,13 @@ results_energy_selected <- mutate(
 
 # Create a bar graph to visualize the results
 # add a NA filter so the articles where the word is not found are not stated on the graph
-plot1 <- ggplot(results_energy_selected %>% filter(!is.na(count)), 
+plot1 <- ggplot(results_energy_selected %>% filter(!is.na(count) & count != 0), 
                 aes(x = factor(count), fill = factor(count))) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'sustainable'") +
   labs(title = "Occurrences of 'sustainable' in body text of articles with 'clean energy' as main topic",
-       x = "Count",
-       y = "Frequency")
+       x = "Occurrences",
+       y = "Amount of articles")
 
 print(plot1)
 
@@ -39,13 +39,13 @@ results_energy_selected <- mutate(results_energy_selected,
  count = rowSums(across(everything(), ~str_detect(tolower(.x), keyword_2))))
 
 # Create a bar graph to visualize the results
-plot2 <- ggplot(results_energy_selected %>% filter(!is.na(count)), 
+plot2 <- ggplot(results_energy_selected %>% filter(!is.na(count) & count != 0), 
                 aes(x = factor(count), fill = factor(count))) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'challenge'") +
-  labs(title = "Occurrences of 'sustainable' in body text of articles with 'clean energy' as main topic",
-       x = "Count",
-       y = "Frequency")
+  labs(title = "Occurrences of 'challenge' in body text of articles with 'clean energy' as main topic",
+       x = "Occurrences",
+       y = "Amount of articles")
 
 print(plot2)
 
@@ -57,13 +57,13 @@ results_car_selected <- mutate(
   results_car_selected, 
   count = rowSums(across(everything(), ~str_detect(tolower(.x), keyword))))
 
-plot3 <- ggplot(results_energy_selected %>% filter(!is.na(count)), 
+plot3 <- ggplot(results_car_selected %>% filter(!is.na(count) & count != 0), 
                 aes(x = factor(count), fill = factor(count))) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'sustainable'") +
   labs(title = "Occurrences of 'sustainable' in body text of articles with 'car' as main topic",
-       x = "Count",
-       y = "Frequency")
+       x = "Occurrences",
+       y = "Amount of articles")
 
 print(plot3)
 
@@ -76,13 +76,13 @@ results_car_selected <- mutate(results_car_selected,
                                   count = rowSums(across(everything(), ~str_detect(tolower(.x), keyword_2))))
 
 #Create the plot for the 
-plot4 <- ggplot(results_energy_selected %>% filter(!is.na(count)), 
+plot4 <- ggplot(results_car_selected %>% filter(!is.na(count) & count != 0), 
                 aes(x = factor(count), fill = factor(count))) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'challenge'") +
   labs(title = "Occurrences of 'challenge' in body text of articles with 'car' as main topic",
-       x = "Count",
-       y = "Frequency")
+       x = "Occurrences",
+       y = "Amount of articles")
 
 print(plot4)
 
