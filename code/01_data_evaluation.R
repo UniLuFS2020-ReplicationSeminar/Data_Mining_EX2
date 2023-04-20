@@ -2,21 +2,26 @@
 
 library(dplyr)
 library(ggplot2)
+library(stringr)
 
 #Load datasets
 
 results_car <- load("data/data_raw/results_car_selected.Rdata")
 results_energy <- load("data/data_raw/results_energy_selected.Rdata")
 
+#Specific word count in all articles-----------
+
 # Count occurrences of "sustainable" in body_text column
+# results are mutated on to the dataframe
 keyword <- "sustainable"
 results_energy_selected <- mutate(
   results_energy_selected, 
   count = rowSums(across(everything(), ~str_detect(tolower(.x), keyword))))
 
 # Create a bar graph to visualize the results
-plot1 <- ggplot(results_energy_selected,
- aes(x = factor(count), fill = factor(count))) +
+# add a NA filter so the articles where the word is not found are not stated on the graph
+plot1 <- ggplot(results_energy_selected %>% filter(!is.na(count)), 
+                aes(x = factor(count), fill = factor(count))) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'sustainable'") +
   labs(title = "Occurrences of 'sustainable' in body text",
@@ -25,7 +30,8 @@ plot1 <- ggplot(results_energy_selected,
 
 print(plot1)
 
-
+#save plot 1
+ggsave("output/plots/word_count_sustainable.png", width = 16, height = 9)
 
 # Count occurrences of "challenge" in body_text column
 keyword_2 <- "challenge"
@@ -33,8 +39,8 @@ results_energy_selected <- mutate(results_energy_selected,
  count = rowSums(across(everything(), ~str_detect(tolower(.x), keyword_2))))
 
 # Create a bar graph to visualize the results
-plot2 <- ggplot(results_energy_selected,
- aes(x = factor(count), fill = factor(count))) +
+plot2 <- ggplot(results_energy_selected %>% filter(!is.na(count)), 
+                aes(x = factor(count), fill = factor(count))) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'challenge'") +
   labs(title = "Occurrences of 'challenge' in body text",
@@ -42,6 +48,9 @@ plot2 <- ggplot(results_energy_selected,
        y = "Frequency")
 
 print(plot2)
+
+#Save second plot
+ggsave("output/plots/word_count_challenge.png", width = 16, height = 9)
 
 
 #show in which articles the keyword has been used a specific amount of time
