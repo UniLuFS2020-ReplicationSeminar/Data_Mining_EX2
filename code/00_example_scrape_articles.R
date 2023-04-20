@@ -1,47 +1,66 @@
-#New Function ---------------------------
-
-#For the start, we can use the pre-made wrapper function guardianapi
+# Install the package guardianapi which includes a pre-made wrapper function to interact with The Guardian's API 
 # install.packages("guardianapi")
+
+# Load the package "guardianapi"
 library(guardianapi)
 
+# Define the api-key as a variable by reading it from a text-file
 api_key <- readLines("credentials/guardian_key.txt", n = 1, warn = FALSE)
+
+# Set the GU_API_KEY environment variable to the value of the api_key
 Sys.setenv(GU_API_KEY = api_key) 
+
+# Assign the API key to the gu.API.key variable (-> gu_content accesses api-key automatically)
 gu_api_key(check_env = TRUE)
 
+# Define variables which will be used to query The Guardian's API 
 query_energy <- "clean energy"
 query_car <- "electric car"
-from_date <- "2023-01-01"
+from_date <- "2020-01-01"
 
+# Query The Guardian's API for articles with the above defined criteria
 results_energy <- gu_content(query = query_energy, from_date = from_date)
 results_car <- gu_content(query = query_car, from_date = from_date)
 
+## Unfortunately, we can see that there are certain articles that are no related 
+# to the topics "clean energy" and / or "electric car" at all. E.g.
+results_energy$body_text[54]
+results_car$body_text[52]
+# Hence, we need to filter out these undesired observations by.
+
+# Add a variable to each data set which will be used to filter the undesired observations out:
 results_energy$check <- rep(0, nrow(results_energy))
-
-library(stringr)
-
-for (i in 1:nrow(results_energy)){
-  if(any(str_detect(results_energy$body_text[i], "clean energy"))) {
-    results_energy$check[i] <- 1
-  } else {
-    results_energy$check[i] <- 0
-  }
-}
-
-results_energy_only <- results_energy[results_energy$check==1,]
-
 results_car$check <- rep(0, nrow(results_car))
 
-for (i in 1:nrow(results_car)){
-  if(any(str_detect(results_car$body_text[i], "electric car"))) {
-    results_car$check[i] <- 1
-  } else {
-    results_car$check[i] <- 0
+# Load the package "stringr"
+library(stringr)
+
+# Loop to filter undesired observations out (results_energy data set):
+for (i in 1:nrow(results_energy)){                                              # loop over the total number of observations in "results_energy"
+  if(any(str_detect(results_energy$body_text[i], "clean energy"))) {            # if body_text contains "clean energy"
+    results_energy$check[i] <- 1                                                # then change the check variable to one,    
+  } else {                                                                      # otherwise
+    results_energy$check[i] <- 0                                                # check variable should remain 0.
   }
 }
 
+# Loop to filter undesired observations out (results_car data set):           
+for (i in 1:nrow(results_car)){                                                 # loop over the total number of observations in "results_car"
+  if(any(str_detect(results_car$body_text[i], "electric car"))) {               # if body_text contains "electric car"
+    results_car$check[i] <- 1                                                   # then change the check variable to one, 
+  } else {                                                                      # otherwise
+    results_car$check[i] <- 0                                                   # check variable should remain 0.
+  }
+}
+
+# Keep only the initially desired articles (those that include the words "clean energy" or "electric car", respectively)
+results_energy_only <- results_energy[results_energy$check==1,]
 results_car_only <- results_car[results_car$check==1,]
 
+# Load the package "tidyverse"
 library(tidyverse)
+
+# Select the variables that can be used for an analysis later on and sort them accordingly ("results_energy_only data set")
 results_energy_selected <- select(results_energy_only, 
                                type, 
                                publication,
@@ -61,6 +80,7 @@ results_energy_selected <- select(results_energy_only,
                                wordcount, 
                                char_count)
 
+# Select the variables that can be used for an analysis later on and sort them accordingly ("results_car_only data set")
 results_car_selected <- select(results_car_only, 
                                type, 
                                publication,
@@ -80,45 +100,8 @@ results_car_selected <- select(results_car_only,
                                wordcount, 
                                char_count)
 
-#save the dataframes in the data_raw
+# Save the data frames in the data_raw folder
 save(results_car_selected, file = "data/data_processed/results_car_selected.rdata")
 save(results_energy_selected, file = "data/data_processed/results_energy_selected.rdata")
-
-#Old Code -------------
-
-library(httr)
-library(jsonlite)
-library(tidyverse)
-
-api_key <- readLines("credentials/guardian_key.txt", n = 1)
-# api_key <- rstudioapi::askForPassword()
-query <- "Clean Energy"
-from_date <- "2023-01-01"
-base_url <- "https://content.guardianapis.com/search"
-
-response <- GET(url = base_url, query = list('api-key' = api_key, q = query,
-                                             from_date = from_date))
-
-json_response <- content(response, "text")
-json_response <- fromJSON(json_response)
-str(json_response)
-results_df <- as.data.frame(json_response$response$results)
-summary(results_df)
-
-#search for articles based on electric cars to make a comparison. 
-#I am expending the time range for further results. 
-
-query_car <- "electric car"
-from_date_c <- "2020-01-01"
-
-response_car <- GET(url = base_url, query = list('api-key' = api_key, q = query_car,
-                                             from_date = from_date_c))
-
-json_response_c <- content(response_car, "text")
-json_response_c <- fromJSON(json_response_c)
-str(json_response_c)
-results_df_c <- as.data.frame(json_response_c$response$results)
-summary(results_df_c)
-
 
 
