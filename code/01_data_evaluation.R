@@ -77,7 +77,7 @@ results_car_selected <- mutate(results_car_selected,
 
 #Create the plot for the 
 plot4 <- ggplot(results_car_selected %>% filter(!is.na(count) & count != 0), 
-                aes(x = factor(count), fill = factor(count))) +
+                aes(x = factor(count), fill = factor(count), fill = "steelblue")) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'challenge'") +
   labs(title = "Occurrences of 'challenge' in body text of articles with 'car' as main topic",
