@@ -24,7 +24,7 @@ plot1 <- ggplot(results_energy_selected %>% filter(!is.na(count)),
                 aes(x = factor(count), fill = factor(count))) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'sustainable'") +
-  labs(title = "Occurrences of 'sustainable' in body text",
+  labs(title = "Occurrences of 'sustainable' in body text of articles with 'clean energy' as main topic",
        x = "Count",
        y = "Frequency")
 
@@ -43,7 +43,7 @@ plot2 <- ggplot(results_energy_selected %>% filter(!is.na(count)),
                 aes(x = factor(count), fill = factor(count))) +
   geom_bar() +
   scale_fill_discrete(name = "Count of 'challenge'") +
-  labs(title = "Occurrences of 'challenge' in body text",
+  labs(title = "Occurrences of 'sustainable' in body text of articles with 'clean energy' as main topic",
        x = "Count",
        y = "Frequency")
 
@@ -52,6 +52,42 @@ print(plot2)
 #Save second plot
 ggsave("output/plots/word_count_challenge.png", width = 16, height = 9)
 
+#The same search is done in hte car articles
+results_car_selected <- mutate(
+  results_car_selected, 
+  count = rowSums(across(everything(), ~str_detect(tolower(.x), keyword))))
+
+plot3 <- ggplot(results_energy_selected %>% filter(!is.na(count)), 
+                aes(x = factor(count), fill = factor(count))) +
+  geom_bar() +
+  scale_fill_discrete(name = "Count of 'sustainable'") +
+  labs(title = "Occurrences of 'sustainable' in body text of articles with 'car' as main topic",
+       x = "Count",
+       y = "Frequency")
+
+print(plot3)
+
+#Save third plot
+ggsave("output/plots/word_count_sustainable_car.png", width = 16, height = 9)
+
+# Count occurrences of "challenge" in body_text column of car articles
+keyword_2 <- "challenge"
+results_car_selected <- mutate(results_car_selected,
+                                  count = rowSums(across(everything(), ~str_detect(tolower(.x), keyword_2))))
+
+#Create the plot for the 
+plot4 <- ggplot(results_energy_selected %>% filter(!is.na(count)), 
+                aes(x = factor(count), fill = factor(count))) +
+  geom_bar() +
+  scale_fill_discrete(name = "Count of 'challenge'") +
+  labs(title = "Occurrences of 'challenge' in body text of articles with 'car' as main topic",
+       x = "Count",
+       y = "Frequency")
+
+print(plot4)
+
+#Save third plot
+ggsave("output/plots/word_count_challenge_car.png", width = 16, height = 9)
 
 #show in which articles the keyword has been used a specific amount of time
 
