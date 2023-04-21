@@ -3,6 +3,9 @@
 library(dplyr)
 library(ggplot2)
 library(stringr)
+library(tidytext)
+library(gridExtra)
+library(ggpubr)
 
 #Load datasets
 
@@ -101,11 +104,8 @@ Articles_energy_challenge <- results_energy_selected %>%
 
 
 
-# Visualize Bi-Grams Pairs --------
-library(tidytext)
-library(gridExtra)
-library(cowplot)
-library(ggpubr)
+# Visualize Bi-Grams Pairs -----------------------------------------------------------
+
 
 generate_word_pairs_data <- function(data) {
   # Tokenize all the words from the article and remove stopwords
@@ -132,6 +132,7 @@ generate_word_pairs_data <- function(data) {
 
 generate_word_pairs_plot <- function(word_pairs, title, xlab = "Word Pairs", highlight_x = NULL) {
   # Add a new column specifying the color for each bar based on its x-value
+  # Analyze what top word pairs are identical in our 2 datasets
   word_pairs$color <- ifelse(!is.null(highlight_x) & 
                                paste(word_pairs$word, word_pairs$word_lead) 
                              %in% highlight_x, "Identical", "Non-identical")
@@ -150,11 +151,11 @@ generate_word_pairs_plot <- function(word_pairs, title, xlab = "Word Pairs", hig
   return(p)
 }
 set.seed(123)
-# # Generate the word pairs data for the energy data
-# word_pairs_energy <- generate_word_pairs_data(results_energy_selected)
-# 
-# # Generate the word pairs data for the car data
-# word_pairs_car <- generate_word_pairs_data(results_car_selected)
+# Generate the word pairs data for the energy data
+word_pairs_energy <- generate_word_pairs_data(results_energy_selected)
+
+# Generate the word pairs data for the car data
+word_pairs_car <- generate_word_pairs_data(results_car_selected)
 
 # Find the common word pairs between the two plots
 common_pairs <- intersect(paste(word_pairs_energy$word, word_pairs_energy$word_lead), paste(word_pairs_car$word, word_pairs_car$word_lead))
@@ -166,13 +167,8 @@ plot_bigrams_energy <- generate_word_pairs_plot(word_pairs_energy, "Top Bi-Grams
 plot_bigrams_car <- generate_word_pairs_plot(word_pairs_car, "Top Bi-Grams Electric Cars", "Car Word Pairs", common_pairs)
 
 #Combine the plots with ggpubrs to have a common legend
-ggpubr::ggarrange(plot_bigrams_energy, plot_bigrams_car, ncol = 2, common.legend = TRUE, legend="bottom")
-
-# Combine the plots into a single grid
-grid.arrange(plot_bigrams_energy, plot_bigrams_car, ncol = 2)
-
-combined_plot <- arrangeGrob(plot_bigrams_energy, plot_bigrams_car, ncol = 2)
-
+combined_plot <- ggpubr::ggarrange(plot_bigrams_energy, plot_bigrams_car, ncol = 2, common.legend = TRUE, legend="bottom")
+combined_plot
 # Save the grob object using ggsave()
 ggsave("output/plots/top_word_pairs_combined.png",
        combined_plot, width = 16, height = 9)
