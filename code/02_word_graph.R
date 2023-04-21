@@ -8,12 +8,12 @@ library(ggraph)
 library(tidygraph)
 
 # Load datasets
-results_car <- load("data/data_raw/results_car_selected.Rdata")
-results_energy <- load("data/data_raw/results_energy_selected.Rdata")
+results_car <- load("data/data_processed/results_car_selected.Rdata")
+results_energy <- load("data/data_processed//results_energy_selected.Rdata")
 
 # Word Tree/Graph --------
 
-
+set.seed(123)
 # Create a function to generate the word pairs network graph
 generate_word_pairs_graph <- function(data, file_name, title) {
   # Tokenize all the words from the article and remove stopwords
@@ -81,8 +81,8 @@ generate_word_pairs_graph <- function(data, file_name, title) {
 }
 
 # Generate and save the word pairs network graph for the energy data with a centered title
-generate_word_pairs_graph(results_energy_selected, "word_tree_ggraph_energy.png", "Energy Word Graph")
+generate_word_pairs_graph(results_energy_selected, "word_tree_ggraph_energy.png", "Clean Energy Word Graph")
 
 # Generate and save the word pairs network graph for the car data with a centered title
-generate_word_pairs_graph(results_car_selected, "word_tree_ggraph_car.png", "Car Word Graph")
+generate_word_pairs_graph(results_car_selected, "word_tree_ggraph_car.png", "Electric Car Word Graph")
 
