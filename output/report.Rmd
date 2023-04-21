@@ -60,7 +60,7 @@ As one can see in the results below, the expression "prime minister" was used mo
 
 ![Top Bi-Grams based on Topic](../output/plots/top_word_pairs_combined.png)
 
-On the topic of "electric car", we are able to highlight a scattered network. The same is the case for the topic "clean energy", but here with individual smaller networks within visible. 
+On the topic of "electric car", we are able to highlight a scattered network. The same is the case for the topic "clean energy". 
 
 ```{r, fig.show='hold',out.width='50%', fig.cap='Word Treegraph of Each Topic'}
 
