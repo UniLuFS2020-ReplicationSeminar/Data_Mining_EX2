@@ -39,9 +39,12 @@ We evaluate the scraped articles using individual keyword searches and then with
 
 ## Results
 
+In a first step, we searched the articles in both subject areas for the most frequently used pair combinations. This gives us a first overview of whether similar keywords were used when editing the articles.
+As can be seen in the results below, the combination "prime minister" was used most frequently in both topics. While the combination "clean energy" is in second place for the articles on the topic "clean energy", it is not in our list of most used combinations for the main topic "car". Nevertheless, at first glance one can see that there are frequently used combinations in both topics, such as: "climate change", "fossil fuels", "renewable energies" or "climate crisis".
+
 ![Top Bi-Grams based on Topic](../output/plots/top_word_pairs_combined.png)
 
-
+In a second step, we would like to find out how the articles on the same topic are connected. To find out, we created word networks.  On the topic of "car", we were able to highlight a scattered network. The same is the case for the topic "renewable energies", but here with individual smaller networks within visible. 
 
 ```{r, fig.show='hold',out.width='50%', fig.cap='Word Treegraph of Each Topic'}
 
