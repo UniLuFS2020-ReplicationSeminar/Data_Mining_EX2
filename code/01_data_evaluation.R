@@ -140,7 +140,7 @@ generate_word_pairs_plot <- function(word_pairs, title, xlab = "Word Pairs", hig
   # Create a bar plot showing the top word pairs using ggplot2
   p <- ggplot(word_pairs, aes(x = reorder(paste(word, word_lead), n), y = n)) +
     geom_col(aes(fill = color)) +
-    scale_fill_manual(values = c("Identical" = "skyblue", "Non-identical" = "maroon")) +
+    scale_fill_manual(values = c("Identical" = "springgreen2", "Non-identical" = "maroon")) +
     coord_flip() +
     ggtitle(title) +
     xlab(xlab) +
