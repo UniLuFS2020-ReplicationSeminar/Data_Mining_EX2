@@ -22,6 +22,13 @@ from_date <- "2020-01-01"
 results_energy <- gu_content(query = query_energy, from_date = from_date)
 results_car <- gu_content(query = query_car, from_date = from_date)
 
+# ## Save and Load the scrape if you don't want to request the data everytime
+# save(results_energy, file = 'data/data_raw/scrape_energy_raw.Rdata')
+# save(results_car, file = 'data/data_raw/scrape_car_raw.Rdata')
+# load('data/data_raw/')
+# load('data/data_raw/')
+# ##
+
 ## Unfortunately, we can see that there are certain articles that are no related 
 # to the topics "clean energy" and / or "electric car" at all. E.g.
 results_energy$body_text[54]
@@ -64,7 +71,7 @@ results_car_selected <- results_car[results_car$check==1,]
 library(tidyverse)
 
 # Select the variables that can be used for an analysis later on and sort them accordingly ("results_energy_only data set")
-results_energy_selected <- select(results_energy_only, 
+results_energy_selected <- select(results_energy_selected, 
                                type, 
                                publication,
                                pillar_name, 
@@ -84,7 +91,7 @@ results_energy_selected <- select(results_energy_only,
                                char_count)
 
 # Select the variables that can be used for an analysis later on and sort them accordingly ("results_car_only data set")
-results_car_selected <- select(results_car_only, 
+results_car_selected <- select(results_car_selected, 
                                type, 
                                publication,
                                pillar_name, 

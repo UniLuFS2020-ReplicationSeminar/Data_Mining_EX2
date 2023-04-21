@@ -14,6 +14,39 @@ test_energy <- cbind(id = seq_len(nrow(test_energy)), test_energy)
 test_energy$first_publication_date <- as.Date(test_energy$first_publication_date)
 
 
+# Test Function Times ----
+# Time the for loop
+loop_time <- system.time({
+  sent_scores <- numeric(nrow(test_energy))
+  
+  for (i in seq_along(sent_scores)) {
+    sentences <- get_sentences(test_energy$body_text[i])
+    sent_scores[i] <- mean(get_sentiment(sentences, method = "syuzhet"))
+  }
+  
+  syuzhet_scores <- test_energy %>%
+    mutate(sent_score = sent_scores)
+})
+
+# Time the map_dbl function
+map_time <- system.time({
+  bing_scores <- test_energy %>%
+    mutate(sentences = map(body_text, get_sentences)) %>%
+    mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "bing")))) %>%
+    select(-sentences)
+})
+
+# Print the results
+loop_time
+map_time
+
+
+
+
+
+
+
+
 
 # Perform sentiment analysis
 sentiments <- test_energy %>%

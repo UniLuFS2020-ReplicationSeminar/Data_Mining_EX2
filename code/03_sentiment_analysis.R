@@ -6,9 +6,11 @@ library(syuzhet)
 library(vader)
 library(tidyverse)
 library(lubridate)
+library(purrr)
 
-load('data/data_processed/results_energy_selected.rdata')
-load('data/data_processed/results_car_selected.rdata')
+# Load the samples 
+load("data/data_processed/sampled_data_car.Rdata")
+load("data/data_processed/sampled_data_energy.Rdata")
 
 test_energy <- results_energy_selected %>% 
   select(first_publication_date, body_text)
@@ -44,51 +46,27 @@ afinn_scores <- test_energy %>%
 # Because Syuzhet Score calculates an absolute Value 
 # Articles with a lot of sentences will get higher values
 #So we need to first loop through the sentences of each article and get the sentiment score average 
-sent_scores <- numeric(nrow(test_energy))
-
-for (i in seq_along(sent_scores)) {
-  sentences <- get_sentences(test_energy$body_text[i])
-  sent_scores[i] <- mean(get_sentiment(sentences, method = "syuzhet"))
-}
-
 syuzhet_scores <- test_energy %>%
-  mutate(sent_score = sent_scores)
+  mutate(sentences = map(body_text, get_sentences)) %>%
+  mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "bing")))) %>%
+  select(-sentences)
 summary(syuzhet_scores$sent_score)
 
 
-#test fast computation
-fast_scores <- test_energy %>%
-  mutate(sentences = map(body_text, get_sentences)) %>%
-  mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "syuzhet")))) %>%
-  select(-sentences)
-
-
 # Compute sentiment scores using the bing method
+#test fast computation
 bing_scores <- test_energy %>%
-  unnest_tokens(word, body_text) %>%
-  inner_join(get_sentiments("bing")) %>%
-  group_by(id) %>%
-  summarize(sent_score = mean(value)) %>%
-  ungroup()
-
-sent_scores <- numeric(nrow(test_energy))
-
-for (i in seq_along(sent_scores)) {
-  sentences <- get_sentences(test_energy$body_text[i])
-  sent_scores[i] <- mean(get_sentiment(sentences, method = "bing"))
-}
-
-bing_scores <- test_energy %>%
-  mutate(sent_score = sent_scores)
+  mutate(sentences = map(body_text, get_sentences)) %>%
+  mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "bing")))) %>%
+  select(-sentences)
 summary(bing_scores$sent_score)
 
 
-
 # Compute sentiment scores using the nrc method
-nrc_scores <- test_energy %>%
-  mutate(sentences = map(body_text, get_sentences)) %>%
-  mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "nrc")))) %>%
-  select(-sentences)
+# nrc_scores <- test_energy %>%
+#   mutate(sentences = map(body_text, get_sentences)) %>%
+#   mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "nrc")))) %>%
+#   select(-sentences)
 
 
 
@@ -97,7 +75,15 @@ test_sent <- get_sentences(test)
 nrc_vector <- get_sentiment(test_sent, method="nrc")
 mean(syuzhet_vector)
 
-get_vader(text = test, rm_qm = TRUE)["compound"]
+as.numeric(get_vader(text = test, rm_qm = TRUE)["compound"])
+
+vader_scores <- test_energy %>%
+  mutate(sent_score = map_dbl(body_text, ~ get_vader(text = .x, rm_qm = TRUE)["compound"]))
+
+vader_scores <- test_energy %>%
+  mutate(sent_score = map_dbl(body_text, ~ as.numeric(get_vader(text = .x, rm_qm = TRUE)["compound"])))
+
+
 
 # Compute sentiment scores using the vader method
 vader_scores <- data.frame(id = test_energy$id,
