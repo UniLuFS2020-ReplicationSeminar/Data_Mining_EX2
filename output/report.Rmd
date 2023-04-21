@@ -4,12 +4,12 @@ author: "Miguel Corredera Payo (14-533-079), Patrick Stöckli (14-103-675), Tobi
   Hoesli (17-494-659)"
 date: "`r Sys.Date()`"
 output:
+  pdf_document:
+    extra_dependencies: subfig
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
     toc: TRUE
-  pdf_document:
-    extra_dependencies: subfig
 urlcolor: blue
 ---
 
@@ -25,7 +25,7 @@ In this class excercise (CE2) we are asked to use real-life scraping scenarios u
 
 Based on the dataset, we want to answer the following research question:
 
-**Can a keyword relationship be found between between articles which mention "clean energy" and "electric cars" ?**
+**What is the relationship between articles which mention "clean energy" and articles which mention "electric car" ?**
 
 ### Hypothesis
 
@@ -56,15 +56,11 @@ We scaled every result so that the range is between -1 and +1.
 
 ## Results
 
-### Keyword search
-
 As one can see in the results below, the expression "prime minister" was used most frequently in both topics. On the second place an again in both topics is the expression "climate change". At first glance one can see that there are many further frequently used combinations in both topics.
 
 ![Top Bi-Grams based on Topic](../output/plots/top_word_pairs_combined.png)
 
-### Keyword network analysis
-
-On the topic of "electric car", we were able to highlight a scattered network. The same is the case for the topic "renewable energies", but here with individual smaller networks within visible. 
+On the topic of "electric car", we are able to highlight a scattered network. The same is the case for the topic "clean energy", but here with individual smaller networks within visible. 
 
 ```{r, fig.show='hold',out.width='50%', fig.cap='Word Treegraph of Each Topic'}
 
@@ -75,13 +71,13 @@ knitr::include_graphics("../output/plots/word_tree_ggraph_energy.png")
 
 \newpage
 
-### Sentiment Analysis
-
 As one can see from the three analyses, sentiment remains fairly neutral over time for both topics. Only the Syuzhet analysis shows some rather strong changes for both topics: From mid-2022 onwards, a drop in sentiment can be seen for articles on the topic of "electric car" / "electric vehicle" and an increase in sentiment for "clean energy" / "renewable energy". 
 
 ![Article Sentiment over Time based on Topic](../output/plots/sentiment_over_time_combined.png)
 
 ## Discussion / Conclusion
+
+We conclude that articles which mention "clean energy" and articles which mention "electric car" are very similar: They use the same keywords and have similar keyword networks. The sentiment also remains fairly neutral over time for both topics, although there are indications that this could have changed from mid-2022 onwards. It could for example be that media report more negatively about electric cars since then. 
 
 <!-- ![Word Tree Topic: Electric Car](../output/plots/word_tree_ggraph_car.png)
 
