@@ -43,10 +43,13 @@ results_car$check <- rep(0, nrow(results_car))
 library(stringr)
 
 # Loop to filter undesired observations out (results_energy data set):
-# loop over the total number of observations in "results_energy", if body_text contains "clean energy", then change the check variable to one, otherwise, check variable should remain 0.
+# loop over the total number of observations in "results_energy",
+# if body_text contains "clean energy", then change the check variable to one,
+# otherwise, check variable should remain 0.
 
 for (i in 1:nrow(results_energy)) {
-  if (any(str_detect(results_energy$body_text[i], "clean energy")) | any(str_detect(results_energy$body_text[i], "renewable energy"))) {
+  if (any(str_detect(results_energy$body_text[i], "clean energy")) |
+      any(str_detect(results_energy$body_text[i], "renewable energy"))) {
     results_energy$check[i] <- 1
   } else {
     results_energy$check[i] <- 0
@@ -56,7 +59,8 @@ for (i in 1:nrow(results_energy)) {
 # Loop to filter undesired observations out (results_car data set):           
 # Create the same loop but observe for "electric car" OR "electric vehicle"
 for (i in 1:nrow(results_car)) {
-  if (any(str_detect(results_car$body_text[i], "electric car")) | any(str_detect(results_car$body_text[i], "electric vehicle"))) {
+  if (any(str_detect(results_car$body_text[i], "electric car")) |
+      any(str_detect(results_car$body_text[i], "electric vehicle"))) {
     results_car$check[i] <- 1
   } else {
     results_car$check[i] <- 0
