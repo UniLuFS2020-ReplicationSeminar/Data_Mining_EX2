@@ -126,11 +126,16 @@ plot_energy <- plot_energy + ylim(y_limits)
 
 
 # Arrange the plots in a grid with 2 columns
-grid_plot <- grid.arrange(plot_car, plot_energy,
-                          ncol = 2)
+# grid_plot <- grid.arrange(plot_car, plot_energy,
+#                           ncol = 2)
+
+#Combine the plots with ggpubrs to have a common legend
+grid_plot <- ggpubr::ggarrange(plot_car, plot_energy,
+                               ncol = 2, common.legend = TRUE, legend="right")
+grid_plot
 
 # Save the grid plot to the output/plots/ folder in high quality
-ggsave("output/plots/sentiment_over_time_combined.png",
+ggsave("output/plots/sentiment_over_time_combined_legend.jpg",
        grid_plot,
        width = 16,
        height = 9,
