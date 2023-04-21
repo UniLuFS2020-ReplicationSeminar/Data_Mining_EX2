@@ -57,9 +57,13 @@ knitr::include_graphics("../output/plots/word_tree_ggraph_energy.png")
 
 ### Sentiment Analysis
 
-![Article Sentiment over Time based on Topic](../output/plots/sentiment_over_time_combined.png)
+To identify the sentiment of the writers, we analysed the text with a sentiment analysis.
 
-Please describe the Plot
+![Article Sentiment over Time based on Topic](../output/plots/sentiment_over_time_combined.png)
+The Bing, Afinn and Syuzhet lexicons provide a polarity that sorts words into positive or negative positions with numerical values. The Bing lexicon has a binary categorisation that simply has two values of -1 and 1. The Afinn lexicon rates words between -5 and 5. The Syuzhet lexicon has more specific values for each mood word, ranging from -1 to 1. We scaled every result so that the range is between -1 and +1.
+
+We have dispensed with an NRC or Vader Sentiment analysis as these take too long.
+
 
 
 <!-- ![Word Tree Topic: Electric Car](../output/plots/word_tree_ggraph_car.png)
