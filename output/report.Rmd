@@ -1,7 +1,8 @@
 ---
-title: "report_excercise_two"
-author: "Miguel Corredera Payo (14-533-079), Patrick Stöckli (14-103-675), Tobias Hoesli (17-494-659"
+title: "Class Excercise 2"
+author: "Miguel Corredera Payo (14-533-079), Patrick Stöckli (14-103-675), Tobias Hoesli (17-494-659)"
 date: "`r Sys.Date()`"
+output:
   pdf_document:
     extra_dependencies: "subfig"
 urlcolor: 'blue'
@@ -11,17 +12,43 @@ urlcolor: 'blue'
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
-##Introduction
+## Introduction
 
-In this class excercise (CE2) we are asked to use life-scrapping scenarios using The Guardian's API which gives us access to over 2 Million Articles. 
+In this class excercise (CE2) we are asked to use life-scrapping scenarios using The Guardian's API which gives us access to over 2 Million Articles.
 
-##Research Question
+## Research Question
 
 Based on the dataset, we want to answer the following research question.
 
-**Can a keyword relationship be found between between articles with "clean energy" and "cars" as main topic?** 
+**Can a keyword relationship be found between between articles with "clean energy" and "cars" as main topic?**
 
-##Hypothesis
+## Hypothesis
 
-As renewable energy is a topic that is becoming more and more important in our society, driven by climate change, we want to find out what impact it has on the car industry. We assume that the car industry will also address the issue of renewable energies, as it will undoubtedly have an influence on its production as well as on the marketing of cars. 
+As renewable energy is a topic that is becoming more and more important in our society, driven by climate change, we want to find out what impact it has on the car industry. We assume that the car industry will also address the issue of renewable energies, as it will undoubtedly have an influence on its production as well as on the marketing of cars.
 
+
+## Results
+
+![Top Bi-Grams based on Topic](../output/plots/top_word_pairs_combined.png)
+
+
+
+```{r, fig.show='hold',out.width='50%', fig.cap='Word Treegraph of Each Topic'}
+
+knitr::include_graphics("../output/plots/word_tree_ggraph_car.png")
+knitr::include_graphics("../output/plots/word_tree_ggraph_energy.png")
+
+```
+
+\newpage
+
+### Sentiment Analysis
+
+![Article Sentiment over Time based on Topic](../output/plots/sentiment_over_time_combined.png)
+
+Please describe the Plot
+
+
+<!-- ![Word Tree Topic: Electric Car](../output/plots/word_tree_ggraph_car.png)
+
+![Word Tree Topic: Renewable Energy](../output/plots/word_tree_ggraph_energy.png) -->

@@ -12,3 +12,8 @@ https://programminghistorian.org/en/lessons/common-similarity-measures
 
 - Variable names should be descriptive
 - Lack of comments describing the code
+
+
+## Syuzhet Package 
+https://cran.r-project.org/web/packages/syuzhet/vignettes/syuzhet-vignette.html
+
