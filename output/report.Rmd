@@ -4,12 +4,12 @@ author: "Miguel Corredera Payo (14-533-079), Patrick Stöckli (14-103-675), Tobi
   Hoesli (17-494-659)"
 date: "`r Sys.Date()`"
 output:
-  pdf_document:
-    extra_dependencies: subfig
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
     toc: TRUE
+  pdf_document:
+    extra_dependencies: subfig
 urlcolor: blue
 ---
 
@@ -36,8 +36,6 @@ We therefore hypothesize that:
 
 ## Methods
 
-<!-- The topic of renewable energies is receiving more and more attention in the press. As well is private transport  as it plays a major role in climate change. Accordingly, the Guardian API comes in handy to scrape the articles related to the above mentioned topics. The data gained from the scrape will afterwards be evaluated fist by individual keyword searches and then with a keyword network analysis. -->
-
 We use the pre-made wrapper function 'gu_content' from the 'guardianapi' package to scrape articles. We tried to write a custom-made wrapper function. However, the result of the queries were non-satisfying, as we ended always ended up with the same articles, independent of the date inputs.   
 
 We first evaluate the scraped articles using an individual keyword search. This gives us a first overview of whether similar keywords are used. 
@@ -52,17 +50,17 @@ To identify the sentiment of the writers, we also apply a sentiment analysis.For
 
 We scaled every result so that the range is between -1 and +1. 
 
-<!-- We have dispensed with an NRC or Vader Sentiment analysis as these take too long.-->
+Our initial intention was to incorporate both the Vader and NRC sentiment analysis methodologies into our study as well. However, upon conducting preliminary tests on a small sample of 400 articles, we found that the computational time required for these methods was prohibitively long.
 
 ## Results
 
 As one can see in the results below, the expression "prime minister" was used most frequently in both topics. On the second place an again in both topics is the expression "climate change". At first glance one can see that there are many further frequently used combinations in both topics.
 
-![Top Bi-Grams based on Topic](../output/plots/top_word_pairs_combined.png)
+![**Top Bi-Grams based on Topic**](../output/plots/top_word_pairs_combined.png)
 
 On the topic of "electric car", we are able to highlight a scattered network. The same is the case for the topic "clean energy", but here with individual smaller networks within visible. 
 
-```{r, fig.show='hold',out.width='50%', fig.cap='Word Treegraph of Each Topic'}
+```{r, fig.show='hold',out.width='50%', fig.cap='**Word Treegraph of Each Topic**'}
 
 knitr::include_graphics("../output/plots/word_tree_ggraph_car.png")
 knitr::include_graphics("../output/plots/word_tree_ggraph_energy.png")
@@ -73,7 +71,7 @@ knitr::include_graphics("../output/plots/word_tree_ggraph_energy.png")
 
 As one can see from the three analyses, sentiment remains fairly neutral over time for both topics. Only the Syuzhet analysis shows some rather strong changes for both topics: From mid-2022 onwards, a drop in sentiment can be seen for articles on the topic of "electric car" / "electric vehicle" and an increase in sentiment for "clean energy" / "renewable energy". 
 
-![Article Sentiment over Time based on Topic](../output/plots/sentiment_over_time_combined.png)
+![**Article Sentiment over Time based on Topic**](../output/plots/sentiment_over_time_combined.png)
 
 ## Discussion / Conclusion
 
