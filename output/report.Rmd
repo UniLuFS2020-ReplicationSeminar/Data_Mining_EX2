@@ -64,6 +64,7 @@ The Bing, Afinn and Syuzhet lexicons provide a polarity that sorts words into po
 
 We have dispensed with an NRC or Vader Sentiment analysis as these take too long.
 
+As can be seen from the three analyses, sentiment remains fairly neutral over time for both issues. Only in the Syuzhet analysis can more drastic changes be shown for both topics. From mid-2022 onwards, a drop in sentiment can be seen for articles on the topic of "cars" and an increase in sentiment for "clean energy".  
 
 
 <!-- ![Word Tree Topic: Electric Car](../output/plots/word_tree_ggraph_car.png)
