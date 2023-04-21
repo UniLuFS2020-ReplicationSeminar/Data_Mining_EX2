@@ -26,6 +26,13 @@ Based on the dataset, we want to answer the following research question.
 
 As renewable energy is a topic that is becoming more and more important in our society, driven by climate change, we want to find out what impact it has on the car industry. We assume that the car industry will also address the issue of renewable energies, as it will undoubtedly have an influence on its production as well as on the marketing of cars.
 
+We therefore hypothesize that:
+- There is a high overlap of keywords between the articles with main topic "Renewable Energy" and "Car". 
+
+##Methods
+
+The topic of renewable energies is receiving more and more attention in the press.As well is private transport  as it plays a major role in climate change. Accordingly, the Guardian API comes in handy to scrape the articles related to the above mentioned topics. The data gained from the scrape will afterwards be evaluated fist by individual keyword searches and then with a keyword network analysis. 
+
 
 ## Results
 
