@@ -15,6 +15,8 @@ We believe that, as climate change becomes an increasingly important issue in ou
 
 In this repository, you will find our code for scraping articles using the pre-made wrapper function 'gu_content' from the 'guardianapi' package. We also attempted to write a custom-made wrapper function, but the results were unsatisfactory.
 
+[Web Scraper R Script](code\00_example_scrape_articles.R)
+
 We first evaluate the scraped articles using an individual keyword search to get an overview of whether similar keywords are used. You can find our code for this analysis in the repository. We then apply a keyword network analysis to see how articles on the same topic are connected. Our code for this analysis is also available in the repository.
 
 To identify the sentiment of the writers, we also apply a sentiment analysis using the Bing, Afinn, and Syuzhet lexicons. These lexicons provide polarity values that sort words into positive or negative positions with numerical values. We scaled every result so that the range is between -1 and +1. Our code for this analysis can be found in the repository.
@@ -27,12 +29,18 @@ In this repository, you will find our results for each of the analyses performed
 
 Our results show that the expression "prime minister" was used most frequently in both topics, followed by "climate change". There are many other frequently used combinations in both topics.
 
+
+[Keyword R script](https://github.com/UniLuFS2020-ReplicationSeminar/Data_Mining_EX2/blob/b2707ca7f255085237b2f2fc1ba86c0643266398/code/01_data_evaluation.R)
+
 ### Keyword Network Analysis
 
 Our results show that the network for the topic of "electric car" is scattered. The same is true for the topic of "renewable energies", but with individual smaller networks visible within.
 
-## Sentiment Analysis
-In *04_sentiment_analysis* we calculate sentiment scores for text data using three different methods: AFINN, Syuzhet, and Bing. The calculated scores are added to the original data frame as new columns and visualized in a plot. This code provides an example of how different sentiment analysis methods can be applied to a dataset of text data to calculate sentiment scores and visualize them.  
+[Network Analysis R script](https://github.com/UniLuFS2020-ReplicationSeminar/Data_Mining_EX2/blob/c3c9eaf139a1d315c81e526cc1c0b3b2d09bacc3/code/02_word_graph.R)
+
+
+### Sentiment Analysis
+In [*04_sentiment_analysis*](code/04_sentiment_analysis.R) we calculate sentiment scores for text data using three different methods: AFINN, Syuzhet, and Bing. The calculated scores are added to the original data frame as new columns and visualized in a plot. This code provides an example of how different sentiment analysis methods can be applied to a dataset of text data to calculate sentiment scores and visualize them.  
 
 ![Article Sentiment over Time based on Topic](output/plots/sentiment_over_time_combined.png)
 
