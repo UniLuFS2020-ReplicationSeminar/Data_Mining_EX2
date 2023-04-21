@@ -12,7 +12,7 @@ library(purrr)
 load("data/data_processed/sampled_data_car.Rdata")
 load("data/data_processed/sampled_data_energy.Rdata")
 
-test_energy <- results_energy_selected %>% 
+test_energy <- sampled_data_energy %>% 
   select(first_publication_date, body_text)
 test_energy <- cbind(id = seq_len(nrow(test_energy)), test_energy)
 test_energy$first_publication_date <- as.Date(test_energy$first_publication_date)
@@ -38,7 +38,6 @@ afinn_scores <- test_energy %>%
   mutate(sent_score = rescale_afinn(sent_score))
 
 # Compute the Syuzhet method
-
 # syuzhet_scores <- test_energy %>%
 #   mutate(sent_score = get_sentiment(body_text, method = "syuzhet"))
 # summary(syuzhet_scores$sent_score)
@@ -48,7 +47,7 @@ afinn_scores <- test_energy %>%
 #So we need to first loop through the sentences of each article and get the sentiment score average 
 syuzhet_scores <- test_energy %>%
   mutate(sentences = map(body_text, get_sentences)) %>%
-  mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "bing")))) %>%
+  mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "syuzhet")))) %>%
   select(-sentences)
 summary(syuzhet_scores$sent_score)
 
@@ -63,80 +62,48 @@ summary(bing_scores$sent_score)
 
 
 # Compute sentiment scores using the nrc method
-# nrc_scores <- test_energy %>%
-#   mutate(sentences = map(body_text, get_sentences)) %>%
-#   mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "nrc")))) %>%
-#   select(-sentences)
+# Takes Too Long
+nrc_scores <- test_energy %>%
+  mutate(sentences = map(body_text, get_sentences)) %>%
+  mutate(sent_score = map_dbl(sentences, ~ mean(get_sentiment(.x, method = "nrc")))) %>%
+  select(-sentences)
+summary(nrc_scores$sent_score)
 
 
 
 test <- test_energy$body_text[1]
 test_sent <- get_sentences(test)
 nrc_vector <- get_sentiment(test_sent, method="nrc")
-mean(syuzhet_vector)
-
-as.numeric(get_vader(text = test, rm_qm = TRUE)["compound"])
-
-vader_scores <- test_energy %>%
-  mutate(sent_score = map_dbl(body_text, ~ get_vader(text = .x, rm_qm = TRUE)["compound"]))
-
-vader_scores <- test_energy %>%
-  mutate(sent_score = map_dbl(body_text, ~ as.numeric(get_vader(text = .x, rm_qm = TRUE)["compound"])))
+mean(nrc_vector)
+as.numeric(get_vader(text = test_sent, rm_qm = TRUE)["compound"])
 
 
+#Vader Sentiment Analysis
+# TAKES TOO LONG
+# vader_scores <- test_energy %>%
+#   mutate(sent_score = map_dbl(body_text, ~ as.numeric(get_vader(text = .x, rm_qm = TRUE)["compound"])))
 
-# Compute sentiment scores using the vader method
-vader_scores <- data.frame(id = test_energy$id,
-                           sent_score = sapply(test_energy$body_text, function(x) get_vader(text = x, rm_qm = TRUE)["compound"]))
 
 # Add sentiment scores to the original data frame
-sentiments <- test_energy %>%
-  left_join(afinn_scores, by = "id") %>%
+sentiments_model <- test_energy %>%
+  left_join(afinn_scores %>% select(id, afinn_score = sent_score), by = "id") %>%
   left_join(syuzhet_scores %>% select(id, syuzhet_score = sent_score), by = "id") %>%
-  left_join(bing_scores, by = "id") %>%
-  left_join(vader_scores %>% select(id, vader_score = sent_score), by = "id") %>%
-  rename(afinn_score = sent_score.x, bing_score = sent_score.y)
+  left_join(bing_scores %>%  select(id, bing_score = sent_score), by = "id") 
+  # %>% left_join(vader_scores %>% select(id, vader_score = sent_score), by = "id") 
+ 
+sentiments_model_long <- sentiments_model %>%
+  select(first_publication_date, afinn_score, syuzhet_score, bing_score) %>%
+  pivot_longer(cols = c(afinn_score, syuzhet_score, bing_score),
+               names_to = "model",
+               values_to = "score")
+
+plot <- ggplot(sentiments_model_long, aes(x = first_publication_date, y = score, color = model)) +
+  geom_smooth(se = FALSE) +
+  labs(title = "Sentiment Scores Over Time",
+       x = "Publication Date", y = "Average Sentiment Score", color = "Sentiment Analysis Method") +
+  theme_minimal()
+
+ggsave('output/plots/sentiment_energy_over_time.png', width = 10, height = 10)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-## OLD -----
-
-
-
-# Perform sentiment analysis using four different methods
-sentiments <- test_energy %>%
-  mutate(
-    afinn_score = unnest_tokens(word, body_text) %>%
-      inner_join(get_sentiments("afinn")) %>%
-      summarize(sent_score = mean(value)) %>%
-      pull(sent_score),
-    syuzhet_score = get_sentiment(body_text, method = "syuzhet"),
-    bing_score = unnest_tokens(word, body_text) %>%
-      inner_join(get_sentiments("bing")) %>%
-      summarize(sent_score = mean(value)) %>%
-      pull(sent_score),
-    vader_score = get_vader_sentiment(body_text)$compound
-  ) %>%
-  mutate(afinn_score = rescale_afinn(afinn_score))
-# Reshape the data for plotting
-sentiments_long <- sentiments %>%
-  select(id, first_publication_date, afinn_score, syuzhet_score, bing_score, vader_score) %>%
-  pivot_longer(-c(id, first_publication_date), names_to = "method", values_to = "sent_score")
-
-# Plot the average sentiment scores by method and publication date
-ggplot(sentiments_long, aes(x = first_publication_date, y = sent_score, color = method)) +
-  geom_smooth() +
-  labs(x = "Publication Date", y = "Average Sentiment Score", color = "Sentiment Analysis Method")
