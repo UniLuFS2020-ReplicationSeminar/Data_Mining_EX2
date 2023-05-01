@@ -17,3 +17,4 @@ https://programminghistorian.org/en/lessons/common-similarity-measures
 ## Syuzhet Package 
 https://cran.r-project.org/web/packages/syuzhet/vignettes/syuzhet-vignette.html
 
+# Add a new link to the list
